@@ -68,13 +68,13 @@ end
 
 
 """
-    ConfusionMatrix(targets::AbstractVector, scores::RealVector, thres::Real)
-    ConfusionMatrix(enc::TwoClassEncoding, targets::AbstractVector, scores::RealVector, thres::Real)
+    ConfusionMatrix(targets::AbstractVector, scores::AbstractVector, thres::Real)
+    ConfusionMatrix(enc::TwoClassEncoding, targets::AbstractVector, scores::AbstractVector, thres::Real)
 
 For the given prediction `scores .>= thres` of the true labels `targets` computes
 the binary confusion matrix.
 """
-function ConfusionMatrix(enc::TwoClassEncoding, targets::AbstractVector, scores::RealVector, thres::Real)
+function ConfusionMatrix(enc::TwoClassEncoding, targets::AbstractVector, scores::AbstractVector, thres::Real)
     length(targets) == length(scores) || throw(DimensionMismatch("Inconsistent lengths of `targets` and `scores`."))
     check_encoding(enc, targets) || throw(ArgumentError("`targets` vector uses incorrect label encoding."))
 
@@ -97,12 +97,12 @@ end
 
 
 """
-    ConfusionMatrix(targets::AbstractVector, scores::RealVector, thres::RealVector)
-    ConfusionMatrix(enc::TwoClassEncoding, targets::AbstractVector, scores::RealVector, thres_in::RealVector)
+    ConfusionMatrix(targets::AbstractVector, scores::AbstractVector, thres::AbstractVector)
+    ConfusionMatrix(enc::TwoClassEncoding, targets::AbstractVector, scores::AbstractVector, thres_in::AbstractVector)
 
 For each threshold from `thres` computes the binary classification confusion matrix.
 """
-function ConfusionMatrix(enc::TwoClassEncoding, targets::AbstractVector, scores::RealVector, thres_in::RealVector)
+function ConfusionMatrix(enc::TwoClassEncoding, targets::AbstractVector, scores::AbstractVector, thres_in::AbstractVector)
     flag_rev = false
     thres = thres_in
 
@@ -155,14 +155,14 @@ end
 
 
 """
-    find_threshold_bins(x::Real, thres::RealVector)
+    find_threshold_bins(x::Real, thres::AbstractVector)
 
 find_threshold_bins:
     x < thres[1] --> 1
     thres[i] <= x < thres[i+1] --> i+1
     x >= thres[n] --> n+1
 """
-function find_threshold_bins(x::Real, thres::RealVector)
+function find_threshold_bins(x::Real, thres::AbstractVector)
     x < thres[1] && return 1
     n = length(thres)
     x >= thres[n] && return n + 1
