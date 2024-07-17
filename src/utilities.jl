@@ -49,14 +49,14 @@ function mergesorted(x::Vector{T}, y::Vector{S}) where {T,S}
 end
 
 
-auc_trapezoidal((x,y)::Tuple{RealVector, RealVector}) = auc_trapezoidal(x, y)
+auc_trapezoidal((x,y)::Tuple{AbstractVector, AbstractVector}) = auc_trapezoidal(x, y)
 
 """
     auc(x::RealVector, y::RealVector)
 
 Computes the area under curve `(x,y)` using trapezoidal rule.
 """
-function auc_trapezoidal(x::RealVector, y::RealVector)
+function auc_trapezoidal(x::AbstractVector, y::AbstractVector)
     n = length(x)
     n == length(y) || throw(DimensionMismatch("Inconsistent lengths of `x` and `y`."))
 

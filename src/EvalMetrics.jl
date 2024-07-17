@@ -4,7 +4,6 @@ module EvalMetrics
 import Base: show, precision
 import DocStringExtensions: SIGNATURES
 import Statistics: quantile
-import StatsBase: RealVector
 using RecipesBase
 using Reexport
 using PrettyTables
@@ -84,11 +83,11 @@ export
     mergesorted
 
 
-binary_eval_report(targets::AbstractVector, scores::RealVector, fpr = 0.05) =
+binary_eval_report(targets::AbstractVector, scores::AbstractVector, fpr = 0.05) =
     binary_eval_report(current_encoding(), targets, scores, fpr)
 
 
-function binary_eval_report(enc::TwoClassEncoding, targets::AbstractVector, scores::RealVector, fpr = 0.05)
+function binary_eval_report(enc::TwoClassEncoding, targets::AbstractVector, scores::AbstractVector, fpr = 0.05)
     t = threshold_at_fpr(enc, targets, scores, fpr)
     c = ConfusionMatrix(enc, targets, scores, t)
 

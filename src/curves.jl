@@ -7,11 +7,11 @@ function auc(::Type{C}, args...; kwargs...) where {C<:AbstractCurve}
     auc_trapezoidal(curve(C, args...; kwargs...))
 end
 function auc(::Type{C}, enc::TwoClassEncoding, targets::AbstractArray{<:AbstractVector},
-               scores::AbstractArray{<:RealVector}, args...; kwargs...) where {C<:AbstractCurve}
+               scores::AbstractArray{<:AbstractVector}, args...; kwargs...) where {C<:AbstractCurve}
     auc_trapezoidal.(curve(C, enc, targets, scores, args...; kwargs...))
 end
 function auc(::Type{C}, targets::AbstractArray{<:AbstractVector},
-               scores::AbstractArray{<:RealVector}, args...; kwargs...) where {C<:AbstractCurve}
+               scores::AbstractArray{<:AbstractVector}, args...; kwargs...) where {C<:AbstractCurve}
     auc_trapezoidal.(curve(C, targets, scores, args...; kwargs...))
 end
 function curve(::Type{C}, args...; npoints=Inf) where {C<:AbstractCurve}
@@ -87,12 +87,12 @@ apply(::Type{C}, targets, scores, thres; kwargs...) where {C<:AbstractCurve} =
 
 function apply(::Type{C}, enc::TwoClassEncoding,
                targets::AbstractArray{<:AbstractVector},
-               scores::AbstractArray{<:RealVector}, args...; kwargs...)  where {C<:AbstractCurve}
+               scores::AbstractArray{<:AbstractVector}, args...; kwargs...)  where {C<:AbstractCurve}
     return [apply(C, t, s, args...; kwargs...) for (t,s) in zip(targets, scores)]
 end
 
 function apply(::Type{C}, enc::TwoClassEncoding,
-               targets::AbstractVector, scores::RealVector;
+               targets::AbstractVector, scores::AbstractVector;
                npoints::Real=300, xscale::Symbol=:identity,
                xlims=(0, 1), kwargs...) where {C<:AbstractCurve}
     # maximal resolution
@@ -118,7 +118,7 @@ end
 function apply(::Type{C},
                enc::TwoClassEncoding,
                targets::AbstractVector,
-               scores::RealVector, thres::RealVector; kwargs...)  where {C<:AbstractCurve}
+               scores::AbstractVector, thres::AbstractVector; kwargs...)  where {C<:AbstractCurve}
     if !(0 < sum(ispositive.(enc, targets)) < length(targets))
         throw(ArgumentError("Only one class present in `targets` with encoding $enc."))
     end
